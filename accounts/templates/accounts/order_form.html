@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fuid mt-3">
+    
+<div class="row">
+    <h2>Order Form</h2>
+	<div class="col-md-6">
+		<div class="card card-body">
+			{% if action == 'create' %}
+				<h3>Create Order</h3>
+			{% elif action == 'update' %}
+				<h3>Update Order</h3>
+			{% endif %}
+			
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="card card-body">
+			<form action="" method="POST">
+            	{% csrf_token %}
+				{{formset.management_form}}
+				{% for form in formset  %}
+                {{form}}
+				<hr>
+				{% endfor %}
+				{% comment %} {% for field in form %} {% endcomment %}
+					{% comment %} {{field.label}} {% endcomment %}
+					{% comment %} {{field|add_class:'form-control'}} {% endcomment %}
+				
+				{% comment %} {% endfor %} {% endcomment %}
+				<hr>
+				<input type="submit" class="btn btn-info">
+			</form>
+		</div>
+	</div>
+</div>
+</div>
+{% endblock %}
