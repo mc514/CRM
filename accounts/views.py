@@ -53,12 +53,12 @@ def registerPage(request):
 			user = form.save()
 			username = form.cleaned_data.get('username')
 			
-			group = Group.objects.get(name='customer')# customer adding to group
-			user.groups.add(group)
-			Customer.objects.create(
-				user=user,
-				name=user.username,
-			)
+			# group = Group.objects.get(name='customer')# customer adding to group
+			# user.groups.add(group)
+			# Customer.objects.create(
+			# 	user=user,
+			# 	name=user.username,
+			# )
 
 			messages.success(request,'Account Created for '+ username)
 			return redirect('login')
@@ -148,7 +148,7 @@ def customer(request,pk):
 
 #-------------------(CREATE VIEWS) -------------------
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin'])
+@allowed_user(allowed_roles=['admin','customer'])
 def createOrder(request, pk):
 	OrderFormSet = inlineformset_factory(Customer,Order, fields=('product','status'),extra=10)# parent model & chiled model
 	customer = Customer.objects.get(id=pk)
@@ -167,9 +167,9 @@ def createOrder(request, pk):
 
 #-------------------(UPDATE VIEWS) -------------------
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin'])
+@allowed_user(allowed_roles=['admin','customer'])
 def updateOrder(request, pk):
-	action = 'update'
+	# action = 'update'
 	order = Order.objects.get(id=pk)
 	form = OrderForm(instance=order)
 
@@ -179,7 +179,7 @@ def updateOrder(request, pk):
 			form.save()
 			return redirect('/')
 
-	context =  {'action':action, 'form':form}
+	context =  {'form':form}
 	return render(request, 'accounts/order_form.html', context)
 
 #-------------------(DELETE VIEWS) -------------------
@@ -194,3 +194,5 @@ def deleteOrder(request, pk):
 		return redirect('/')
 		
 	return render(request, 'accounts/delete_item.html', {'item':order})
+
+
